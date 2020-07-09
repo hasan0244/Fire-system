@@ -1,0 +1,67 @@
+#include <LiquidCrystal.h>
+
+int gasSensorA = 0;
+int gasSensorB = 0;
+LiquidCrystal lcd (12, 11, 7, 6, 5, 4);
+void setup()
+{
+  pinMode(A0, INPUT);
+  pinMode(A1, INPUT);
+  pinMode(2, OUTPUT);
+  pinMode(3, OUTPUT);
+  pinMode(9, OUTPUT);
+  pinMode(10, OUTPUT);
+  Serial.begin(9600);
+  lcd.begin(16, 2);
+}
+void loop()
+{
+  gasSensorA=analogRead(A0);
+  gasSensorB=analogRead(A1);
+if (gasSensorA > 800 && gasSensorB> 800)
+{
+  lcd.clear();
+  digitalWrite(2, HIGH);
+  digitalWrite(10, HIGH); 
+  tone(3,450,800);
+  tone(9,450,800);
+  lcd.setCursor(3,0);
+  lcd.print("FIREE!!!!");
+  lcd.setCursor(0,2);
+  lcd.print("IN EVERY SECTOR");
+}
+  
+  else if(gasSensorA > 800)
+  {
+    lcd.clear();
+    digitalWrite(2, HIGH);
+    digitalWrite(10, LOW);
+    tone(9,450,800);
+    lcd.setCursor(3,0);
+    lcd.print("FIREE!!!!");
+    lcd.setCursor(2,2);
+    lcd.print("IN SECTOR A");
+  }
+  else if(gasSensorB>800)
+  {
+    lcd.clear();
+    digitalWrite(2, LOW);
+    noTone(9);
+    digitalWrite( 10, HIGH);
+    tone(3,450,800);
+    lcd.setCursor( 3,0);
+    lcd.print("FIREE!!!!");
+    lcd.setCursor(2,2);
+    lcd.print("IN SECTOR B");
+  }
+  
+     else 
+     {
+       digitalWrite(2, LOW);
+       noTone(9);
+       digitalWrite(10, LOW);
+       noTone(3);
+       lcd.clear();
+     }
+  delay(500);
+}
